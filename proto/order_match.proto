@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package ordermatch;
+
+// Buy or sell. SIDE_UNSPECIFIED (0) is the proto3 default and should never be
+// emitted by a well-formed producer.
+enum Side {
+  SIDE_UNSPECIFIED = 0;
+  BUY = 1;
+  SELL = 2;
+}
+
+// Published by the Market Data Generator to the `orders` topic, keyed by symbol.
+message OrderCreated {
+  string order_id = 1;
+  string symbol = 2;
+  int32 quantity = 3;
+  int64 price_ticks = 4;           // fixed-point: 1 tick = 1 cent ($101.20 = 10120)
+  Side side = 5;
+  int64 created_timestamp_us = 6;  // microseconds since epoch, set at generation time
+}
+
+// Published by the Matching Engine to the `trades` topic, keyed by symbol.
+// Carries the aggressor's creation timestamp so analytics can compute end-to-end
+// latency without joining topics.
+message TradeExecuted {
+  string trade_id = 1;
+  string symbol = 2;
+  int64 price_ticks = 3;                    // resting (passive) order's price
+  int32 quantity = 4;
+  string aggressor_order_id = 5;
+  string resting_order_id = 6;
+  int64 aggressor_created_timestamp_us = 7; // copied from the incoming order
+  int64 executed_timestamp_us = 8;          // set by the matching engine at execution
+}

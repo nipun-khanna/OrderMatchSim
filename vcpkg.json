@@ -1,0 +1,24 @@
+{
+  "name": "ordermatchsim",
+  "version": "0.1.0",
+  "description": "A miniature order-matching stock exchange simulator built on Kafka (learning project).",
+  "builtin-baseline": "827a2e1203bc19941126c657166da44f2623acc4",
+  "dependencies": [
+    "protobuf",
+    "librdkafka",
+    "modern-cpp-kafka",
+    "spdlog",
+    "fmt",
+    {
+      "name": "gtest",
+      "platform": "!uwp"
+    }
+  ],
+  "overrides": [
+    {
+      "name": "protobuf",
+      "version": "3.21.12",
+      "port-version": 4
+    }
+  ]
+}
